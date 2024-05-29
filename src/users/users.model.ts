@@ -21,12 +21,12 @@ export class User extends Model<User, UserCreationAttrs>{
     @Column({type:DataType.STRING, allowNull:false})
     password:string;
 
-    @Column({type:DataType.STRING, allowNull:true})
+    @Column({type:DataType.STRING, allowNull:false, defaultValue:"Avatar"})
     avatar:string;
 
-    @Column({type:DataType.BOOLEAN, defaultValue:false})
+    @Column({type:DataType.BOOLEAN, allowNull:false, defaultValue:false})
     banned:boolean;
 
-    @Column({type:DataType.STRING, allowNull:false})
+    @Column({type:DataType.STRING, allowNull: false, defaultValue: ""})
     bannedReason:string;
 }

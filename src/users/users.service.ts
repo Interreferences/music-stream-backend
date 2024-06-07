@@ -1,10 +1,10 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import {User} from "./users.model";
-import {InjectModel} from "@nestjs/sequelize";
-import {CreateUserDto} from "./dto/create-user.dto";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { User } from "./users.model";
+import { InjectModel } from "@nestjs/sequelize";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { BanUserDto } from "./dto/ban-user.dto";
+import { Role } from '../roles/roles.model';
 import {RolesService} from "../roles/roles.service";
-import {AddRoleDto} from "./dto/add-role.dto";
-import {BanUserDto} from "./dto/ban-user.dto";
 
 @Injectable()
 export class UsersService {
@@ -12,36 +12,30 @@ export class UsersService {
     constructor(@InjectModel(User) private userRepository: typeof User,
                 private roleService: RolesService) {}
 
-    async CreateUser(dto: CreateUserDto) {
-        const user = await this.userRepository.create(dto);
-        const role = await this.roleService.getRoleByValue("User");
-        await user.$set('roles', [role.id]);
-        user.roles = [role]
-        return user;
-    }
 
-    async GetAllUsers() {
-        const users = await this.userRepository.findAll({include: {all:true}});
-        return users;
-    }
-
-    async getUserByLogin(login: string) {
-        const user = await this.userRepository.findOne({where: {login}, include: {all: true}})
-        return user;
-    }
-
-
-    async addRole(dto: AddRoleDto) {
-        const user = await this.userRepository.findByPk(dto.userId);
-        const role = await this.roleService.getRoleByValue(dto.value);
-        if (user && role) {
-            await user.$add('role', role.id);
-            return dto;
+    async createUser(dto: CreateUserDto) {
+        const role = await this.roleService.getRoleByValue("Admin");
+        if (!role) {
+            throw new HttpException('Роль "User" не найдена', HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND);
+
+        const user = await this.userRepository.create({
+            ...dto,
+            roleId: role.id // присваиваем роль пользователю
+        });
+
+        return user;
     }
 
-    async ban(dto: BanUserDto) {
+    async getAllUsers(): Promise<User[]> {
+        return this.userRepository.findAll({ include: [Role] });
+    }
+
+    async getUserByLogin(login: string): Promise<User> {
+        return this.userRepository.findOne({ where: { login }, include: [Role] });
+    }
+
+    async ban(dto: BanUserDto): Promise<User> {
         const user = await this.userRepository.findByPk(dto.userId);
         if (!user) {
             throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
@@ -51,5 +45,4 @@ export class UsersService {
         await user.save();
         return user;
     }
-
 }

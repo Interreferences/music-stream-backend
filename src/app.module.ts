@@ -1,19 +1,19 @@
-import {Module} from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { UsersModule } from './users/users.module';
-import {ConfigModule} from "@nestjs/config";
-import {User} from "./users/users.model";
+import { ConfigModule } from "@nestjs/config";
+import { User } from "./users/users.model";
 import { RolesModule } from './roles/roles.module';
-import {Role} from "./roles/roles.model";
-import {UserRoles} from "./roles/user-roles.model";
+import { Role } from "./roles/roles.model";
 import { AuthModule } from './auth/auth.module';
+import { GenresModule } from './genres/genres.module';
 
 @Module({
     controllers: [],
     providers: [],
     imports: [
         ConfigModule.forRoot({
-           envFilePath: `.${process.env.NODE_ENV}.env`
+            envFilePath: `.${process.env.NODE_ENV}.env`
         }),
         SequelizeModule.forRoot({
             dialect: 'postgres',
@@ -22,7 +22,7 @@ import { AuthModule } from './auth/auth.module';
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, UserRoles],
+            models: [User, Role],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },
@@ -30,6 +30,7 @@ import { AuthModule } from './auth/auth.module';
         UsersModule,
         RolesModule,
         AuthModule,
+        GenresModule,
     ],
 })
-export class AppModule{}
+export class AppModule {}

@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Genres } from './genres.model';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
+import {Op} from "sequelize";
 
 @Injectable()
 export class GenresService {
@@ -37,7 +38,17 @@ export class GenresService {
         return genre;
     }
 
-    async findGenreByName(name: string) {
-        return await this.genreRepository.findOne({ where: { name } });
+    async findGenreByName(name: string): Promise<Genres[]> {
+        const genres = await this.genreRepository.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${name}%`
+                }
+            }
+        });
+        if (!genres.length) {
+            throw new NotFoundException(`Labels with name containing "${name}" not found`);
+        }
+        return genres;
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query} from '@nestjs/common';
 import { GenresService } from './genres.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
@@ -17,9 +17,16 @@ export class GenresController {
         return this.genresService.getAllGenres();
     }
 
-    @Get('search') // Перенесли этот метод вверх
-    findByName(@Query('name') name: string) {
-        return this.genresService.findGenreByName(name);
+    @Get('search/:name')
+    async findByName(@Param('name') name: string) {
+        try {
+            return await this.genresService.findGenreByName(name);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                return { message: error.message };
+            }
+            throw error;
+        }
     }
 
     @Get(':id')

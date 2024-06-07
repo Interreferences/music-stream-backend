@@ -8,6 +8,8 @@ import { RolesModule } from './roles/roles.module';
 import { Role } from "./roles/roles.model";
 import { AuthModule } from './auth/auth.module';
 import { GenresModule } from './genres/genres.module';
+import { LabelsModule } from './labels/labels.module';
+import {Label} from "./labels/label.model";
 
 @Module({
     controllers: [],
@@ -23,7 +25,7 @@ import { GenresModule } from './genres/genres.module';
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Genres],
+            models: [User, Role, Genres, Label],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },
@@ -32,6 +34,7 @@ import { GenresModule } from './genres/genres.module';
         RolesModule,
         AuthModule,
         GenresModule,
+        LabelsModule,
     ],
 })
 export class AppModule {}

@@ -3,6 +3,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from "@nestjs/config";
 import { User } from "./users/users.model";
+import { Genres } from "./genres/genres.model";
 import { RolesModule } from './roles/roles.module';
 import { Role } from "./roles/roles.model";
 import { AuthModule } from './auth/auth.module';
@@ -22,7 +23,7 @@ import { GenresModule } from './genres/genres.module';
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role],
+            models: [User, Role, Genres],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },

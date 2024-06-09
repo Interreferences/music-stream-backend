@@ -10,11 +10,20 @@ import { AuthModule } from './auth/auth.module';
 import { GenresModule } from './genres/genres.module';
 import { LabelsModule } from './labels/labels.module';
 import {Label} from "./labels/label.model";
+import { ArtistsModule } from './artists/artists.module';
+import {Artist} from "./artists/artists.model";
+import { FileModule } from './file/file.module';
+import * as path from 'path'
+import {ServeStaticModule} from "@nestjs/serve-static";
+import { LanguagesModule } from './languages/languages.module';
 
 @Module({
     controllers: [],
     providers: [],
     imports: [
+        ServeStaticModule.forRoot({
+            rootPath: path.resolve(__dirname, 'static'),
+        }),
         ConfigModule.forRoot({
             envFilePath: `.${process.env.NODE_ENV}.env`
         }),
@@ -25,7 +34,7 @@ import {Label} from "./labels/label.model";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Genres, Label],
+            models: [User, Role, Genres, Label, Artist],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },
@@ -35,6 +44,9 @@ import {Label} from "./labels/label.model";
         AuthModule,
         GenresModule,
         LabelsModule,
+        ArtistsModule,
+        FileModule,
+        LanguagesModule,
     ],
 })
 export class AppModule {}

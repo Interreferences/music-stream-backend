@@ -16,6 +16,14 @@ import { FileModule } from './file/file.module';
 import * as path from 'path'
 import {ServeStaticModule} from "@nestjs/serve-static";
 import { LanguagesModule } from './languages/languages.module';
+import { TracksModule } from './tracks/tracks.module';
+import { ReleasesModule } from './releases/releases.module';
+import {Track} from "./tracks/tracks.model";
+import {Release} from "./releases/releases.model";
+import {TrackArtists} from "./tracks/track-artists.model";
+import {Language} from "./languages/languages.model";
+import {ReleaseArtists} from "./releases/release-artists.model";
+import {TrackLanguages} from "./tracks/track-languages.model";
 
 @Module({
     controllers: [],
@@ -34,7 +42,7 @@ import { LanguagesModule } from './languages/languages.module';
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Genres, Label, Artist],
+            models: [User, Role, Genres, Label, Artist, Track, Release, TrackArtists, ReleaseArtists, Language, TrackLanguages],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },
@@ -47,6 +55,8 @@ import { LanguagesModule } from './languages/languages.module';
         ArtistsModule,
         FileModule,
         LanguagesModule,
+        TracksModule,
+        ReleasesModule,
     ],
 })
 export class AppModule {}

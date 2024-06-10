@@ -1,4 +1,6 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
+import {BelongsToMany, Column, DataType, Model, Table} from "sequelize-typescript";
+import {Track} from "../tracks/tracks.model";
+import {TrackArtists} from "../tracks/track-artists.model";
 
 interface ArtistCreationAttrs {
     name:string;
@@ -22,4 +24,7 @@ export class Artist extends Model<Artist, ArtistCreationAttrs> {
 
     @Column({type: DataType.TEXT, allowNull: true})
     bio: string;
+
+    @BelongsToMany(() => Track, () => TrackArtists)
+    tracks: Track[];
 }

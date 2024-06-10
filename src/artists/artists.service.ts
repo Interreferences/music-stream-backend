@@ -14,8 +14,8 @@ export class ArtistsService {
     ) {}
 
     async createArtist(dto: CreateAtristDto, avatar, banner) {
-        const avatarPath = this.fileService.createFile(FileType.IMAGE, avatar);
-        const bannerPath = this.fileService.createFile(FileType.IMAGE, banner);
+        const avatarPath = await this.fileService.createFile(FileType.IMAGE, avatar);
+        const bannerPath = await this.fileService.createFile(FileType.IMAGE, banner);
         const artist = await this.artistRepository.create({ ...dto, avatar: avatarPath, banner: bannerPath });
         return artist;
     }
@@ -43,12 +43,12 @@ export class ArtistsService {
 
         if (avatar) {
             this.fileService.removeFile(artist.avatar);
-            avatarPath = this.fileService.createFile(FileType.IMAGE, avatar);
+            avatarPath = await this.fileService.createFile(FileType.IMAGE, avatar);
         }
 
         if (banner) {
             this.fileService.removeFile(artist.banner);
-            bannerPath = this.fileService.createFile(FileType.IMAGE, banner);
+            bannerPath = await this.fileService.createFile(FileType.IMAGE, banner);
         }
 
         const updatedArtist = {
@@ -79,7 +79,7 @@ export class ArtistsService {
             }
         });
         if (!artists.length) {
-            throw new NotFoundException(`Артисты с "${name}" не найдены`);
+            throw new NotFoundException(`Артисты по запросу: "${name}" не найдены`);
         }
         return artists;
     }

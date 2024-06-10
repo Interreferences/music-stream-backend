@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import {BelongsToMany, Column, DataType, Model, Table} from "sequelize-typescript";
+import {Track} from "../tracks/tracks.model";
+import {TrackLanguages} from "../tracks/track-languages.model";
 interface LanguageCreationAttrs {
     name: string;
 }
@@ -10,4 +12,7 @@ export class Language extends Model<Language, LanguageCreationAttrs> {
 
     @Column({ type: DataType.STRING, unique: true, allowNull: false })
     name: string;
+
+    @BelongsToMany(() => Track, () => TrackLanguages)
+    tracks: Track[];
 }

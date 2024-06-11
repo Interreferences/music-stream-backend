@@ -30,6 +30,8 @@ import {ReleaseLabels} from "./releases/release-labels.model";
 import { SocialsModule } from './socials/socials.module';
 import {Social} from "./socials/socials.model";
 import {ArtistSocials} from "./artists/artist-socials.model";
+import { PlaylistTypeModule } from './playlist-type/playlist-type.module';
+import {PlaylistType} from "./playlist-type/playlist-type.model";
 
 @Module({
     controllers: [],
@@ -63,7 +65,8 @@ import {ArtistSocials} from "./artists/artist-socials.model";
                 TrackLanguages,
                 ReleaseType,
                 Social,
-                ArtistSocials],
+                ArtistSocials,
+                PlaylistType],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },
@@ -80,6 +83,7 @@ import {ArtistSocials} from "./artists/artist-socials.model";
         ReleasesModule,
         ReleaseTypeModule,
         SocialsModule,
+        PlaylistTypeModule,
     ],
 })
 export class AppModule {}

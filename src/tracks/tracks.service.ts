@@ -9,6 +9,8 @@ import {TrackLanguages} from "./track-languages.model";
 import {Artist} from "../artists/artists.model";
 import {Language} from "../languages/languages.model";
 import {Op} from "sequelize";
+import {Genres} from "../genres/genres.model";
+import {Release} from "../releases/releases.model";
 @Injectable()
 export class TracksService {
     constructor(
@@ -56,6 +58,14 @@ export class TracksService {
                 {
                     model: Language,
                     through: { attributes: [] }, // Отключить промежуточную таблицу в результате
+                },
+                {
+                    model: Genres, // Включаем модель Genres
+                    attributes: ['id', 'name'], // Указываем атрибуты, которые хотим получить
+                },
+                {
+                    model: Release, // Включаем модель Genres
+                    attributes: ['id', 'title', 'cover', 'releaseDate'], // Указываем атрибуты, которые хотим получить
                 },
             ],
         });

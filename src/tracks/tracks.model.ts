@@ -45,6 +45,9 @@ export class Track extends Model<Track, TrackCreationAttrs> {
     @Column({ type: DataType.INTEGER, allowNull: false })
     genreId: number;
 
+    @BelongsTo(() => Release)  // Добавляем связь belongsTo
+    release: Release;
+
     @BelongsTo(() => Genres)
     genre: Genres;
 

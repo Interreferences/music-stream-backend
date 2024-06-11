@@ -24,6 +24,9 @@ import {TrackArtists} from "./tracks/track-artists.model";
 import {Language} from "./languages/languages.model";
 import {ReleaseArtists} from "./releases/release-artists.model";
 import {TrackLanguages} from "./tracks/track-languages.model";
+import { ReleaseTypeModule } from './release-type/release-type.module';
+import {ReleaseType} from "./release-type/release-type.model";
+import {ReleaseLabels} from "./releases/release-labels.model";
 
 @Module({
     controllers: [],
@@ -42,7 +45,7 @@ import {TrackLanguages} from "./tracks/track-languages.model";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Genres, Label, Artist, Track, Release, TrackArtists, ReleaseArtists, Language, TrackLanguages],
+            models: [User, Role, Genres, Label, Artist, Track, Release, TrackArtists, ReleaseArtists, ReleaseLabels, Language, TrackLanguages, ReleaseType],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },
@@ -57,6 +60,7 @@ import {TrackLanguages} from "./tracks/track-languages.model";
         LanguagesModule,
         TracksModule,
         ReleasesModule,
+        ReleaseTypeModule,
     ],
 })
 export class AppModule {}

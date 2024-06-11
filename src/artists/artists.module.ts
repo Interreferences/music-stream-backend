@@ -7,7 +7,6 @@ import {FileService} from "../file/file.service";
 import {Track} from "../tracks/tracks.model";
 import {TrackArtists} from "../tracks/track-artists.model";
 
-
 @Module({
   imports: [
       SequelizeModule.forFeature([Artist, Track, TrackArtists]),

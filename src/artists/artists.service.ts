@@ -1,63 +1,106 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateAtristDto } from './dto/create-atrist.dto';
+import {CreateArtistDto} from './dto/create-artist.dto';
 import { Artist } from './artists.model';
-import { UpdateAtristDto } from './dto/update-atrist.dto';
+import {UpdateArtistDto} from './dto/update-artist.dto';
 import { Op } from 'sequelize';
 import { FileService, FileType } from '../file/file.service';
+import {ArtistSocials} from "./artist-socials.model";
+import {Social} from "../socials/socials.model";
 
 @Injectable()
 export class ArtistsService {
     constructor(
         @InjectModel(Artist) private artistRepository: typeof Artist,
+        @InjectModel(ArtistSocials) private artistSocialsRepository: typeof ArtistSocials,
+        @InjectModel(Social) private socialRepository: typeof Social,
         private fileService: FileService
     ) {}
 
-    async createArtist(dto: CreateAtristDto, avatar, banner) {
+    async createArtist(dto: CreateArtistDto, avatar, banner) {
         const avatarPath = await this.fileService.createFile(FileType.IMAGE, avatar);
         const bannerPath = await this.fileService.createFile(FileType.IMAGE, banner);
-        const artist = await this.artistRepository.create({ ...dto, avatar: avatarPath, banner: bannerPath });
+
+        // Создаем артиста в базе данных
+        const artist = await this.artistRepository.create({
+            ...dto,
+            avatar: avatarPath,
+            banner: bannerPath
+        });
+
+        // Если переданы социальные сети, создаем записи о них в базе данных
+        if (dto.socials && dto.socials.length > 0) {
+            await Promise.all(dto.socials.map(async (social) => {
+                const socialRecord = await this.socialRepository.findByPk(social.socialId);
+                if (socialRecord) {
+                    await this.artistSocialsRepository.create({
+                        artistId: artist.id,
+                        socialId: socialRecord.id,
+                        title: social.title,
+                        link: social.link
+                    });
+                }
+            }));
+        }
+
         return artist;
     }
+
+
 
     async findAllArtists() {
         return await this.artistRepository.findAll();
     }
 
     async findArtistById(id: number) {
-        const artist = await this.artistRepository.findByPk(id);
+        const artist = await this.artistRepository.findByPk(id, {
+            include: [
+                {
+                    model: Social,
+                    attributes: ['id', 'title'],
+                },
+            ]
+        });
         if (!artist) {
             throw new NotFoundException('Артист не найден');
         }
         return artist;
     }
 
-    async updateArtist(id: number, updateArtistDto: UpdateAtristDto, avatar, banner) {
+    async updateArtist(id: number, updateArtistDto: UpdateArtistDto, avatar, banner) {
         const artist = await this.artistRepository.findByPk(id);
         if (!artist) {
             throw new NotFoundException('Артист не найден');
         }
 
-        let avatarPath = artist.avatar;
-        let bannerPath = artist.banner;
-
         if (avatar) {
-            this.fileService.removeFile(artist.avatar);
-            avatarPath = await this.fileService.createFile(FileType.IMAGE, avatar);
+            await this.fileService.removeFile(artist.avatar);
+            const avatarPath = await this.fileService.createFile(FileType.IMAGE, avatar);
+            artist.avatar = avatarPath;
         }
 
         if (banner) {
-            this.fileService.removeFile(artist.banner);
-            bannerPath = await this.fileService.createFile(FileType.IMAGE, banner);
+            await this.fileService.removeFile(artist.banner);
+            const bannerPath = await this.fileService.createFile(FileType.IMAGE, banner);
+            artist.banner = bannerPath;
         }
 
-        const updatedArtist = {
-            ...updateArtistDto,
-            avatar: avatarPath,
-            banner: bannerPath,
-        };
+        if (updateArtistDto.socials && updateArtistDto.socials.length > 0) {
+            // Удаляем старые социальные сети
+            await this.artistSocialsRepository.destroy({ where: { artistId: id } });
+            // Создаем новые социальные сети
+            await Promise.all(updateArtistDto.socials.map(async (social) => {
+                await this.artistSocialsRepository.create({
+                    artistId: id,
+                    title: social.title,
+                    link: social.link
+                });
+            }));
+        }
 
-        return await artist.update(updatedArtist);
+        await artist.save();
+
+        return this.findArtistById(id);
     }
 
     async deleteArtist(id: number) {

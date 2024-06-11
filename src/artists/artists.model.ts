@@ -1,6 +1,10 @@
-import {BelongsToMany, Column, DataType, Model, Table} from "sequelize-typescript";
+import {BelongsToMany, Column, DataType, HasMany, Model, Table} from "sequelize-typescript";
 import {Track} from "../tracks/tracks.model";
 import {TrackArtists} from "../tracks/track-artists.model";
+import {Social} from "../socials/socials.model";
+import {ArtistSocials} from "./artist-socials.model";
+import {ReleaseArtists} from "../releases/release-artists.model";
+import {Release} from "../releases/releases.model";
 
 interface ArtistCreationAttrs {
     name:string;
@@ -27,4 +31,13 @@ export class Artist extends Model<Artist, ArtistCreationAttrs> {
 
     @BelongsToMany(() => Track, () => TrackArtists)
     tracks: Track[];
+
+    @BelongsToMany(() => Release, () => ReleaseArtists)
+    releases: Release[];
+
+    @HasMany(() => ArtistSocials)
+    artistSocials: ArtistSocials[];
+
+    @BelongsToMany(() => Social, () => ArtistSocials)
+    socials: Social[];
 }

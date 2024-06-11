@@ -11,8 +11,8 @@ import {
     UseInterceptors
 } from '@nestjs/common';
 import {ArtistsService} from "./artists.service";
-import {CreateAtristDto} from "./dto/create-atrist.dto";
-import {UpdateAtristDto} from "./dto/update-atrist.dto";
+import {CreateArtistDto} from "./dto/create-artist.dto";
+import {UpdateArtistDto} from "./dto/update-artist.dto";
 import {FileFieldsInterceptor} from "@nestjs/platform-express";
 
 @Controller('artists')
@@ -24,7 +24,7 @@ export class ArtistsController {
         { name: 'avatar', maxCount: 1 },
         { name: 'banner', maxCount: 1 },
     ]))
-    async create(@UploadedFiles() files, @Body() createArtistDto: CreateAtristDto) {
+    async create(@UploadedFiles() files, @Body() createArtistDto: CreateArtistDto) {
         const {avatar, banner} = files
         return this.artistsService.createArtist(createArtistDto, avatar[0], banner[0]);
     }
@@ -44,9 +44,10 @@ export class ArtistsController {
         { name: 'avatar', maxCount: 1 },
         { name: 'banner', maxCount: 1 },
     ]))
-    async update(@Param('id') id: number, @Body() updateArtistDto: UpdateAtristDto, @UploadedFiles() files) {
-        const { avatar, banner } = files;
-        return this.artistsService.updateArtist(id, updateArtistDto, avatar ? avatar[0] : null, banner ? banner[0] : null);
+    async update(@Param('id') id: number, @Body() updateArtistDto: UpdateArtistDto, @UploadedFiles() files) {
+        const avatar = files?.avatar ? files.avatar[0] : null;
+        const banner = files?.banner ? files.banner[0] : null;
+        return this.artistsService.updateArtist(id, updateArtistDto, avatar, banner);
     }
 
     @Delete(':id')

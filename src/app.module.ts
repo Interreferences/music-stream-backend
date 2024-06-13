@@ -74,8 +74,8 @@ import {PlaylistTracks} from "./playlists/playlist-tracks.model";
                 Playlist,
                 PlaylistTracks],
             autoLoadModels: true,
-            synchronize: true, // синхронизация моделей с таблицами
-            sync: { alter: true },
+            synchronize: false, // синхронизация моделей с таблицами
+            // sync: { alter: true },
         }),
         RolesModule,
         GenresModule,

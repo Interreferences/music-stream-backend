@@ -15,7 +15,7 @@ import {CreatePlaylistDto} from "./dto/create-playlist.dto";
 import {AddTrackToPlaylistDto} from "./dto/add-track-to-playlist.dto";
 import {UpdatePlaylistDto} from "./dto/update-playlist.dto";
 
-@Controller('playlists')
+@Controller('api/playlists')
 export class PlaylistsController {
 
     constructor(private readonly playlistsService: PlaylistsService) {}

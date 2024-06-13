@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RolesService } from "./roles.service";
 import { CreateRoleDto } from "./dto/create-role.dto";
 
-@Controller('roles')
+@Controller('api/roles')
 export class RolesController {
 
     constructor(private roleService: RolesService) {}

@@ -5,50 +5,38 @@ import {UpdateLanguageDto} from "./dto/update-language.dto";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 
-@Controller('languages')
+@Controller('api/languages')
 export class LanguagesController {
 
     constructor(private readonly languagesService: LanguagesService) {}
 
-    @Roles("Admin")
-    @UseGuards(RolesGuard)
     @Post()
     async create(@Body() createLanguageDto: CreateLanguageDto) {
         return this.languagesService.createLanguage(createLanguageDto);
     }
 
-    @Roles("Admin")
-    @UseGuards(RolesGuard)
     @Get()
     async findAll() {
         return this.languagesService.findAllLanguages();
     }
 
-    @Roles("Admin")
-    @UseGuards(RolesGuard)
     @Get(':id')
     async findOne(@Param('id') id: number) {
         return this.languagesService.findLanguageById(id);
     }
 
-    @Roles("Admin")
-    @UseGuards(RolesGuard)
     @Patch(':id')
     async update(@Param('id') id: number, @Body() updateLanguageDto: UpdateLanguageDto) {
         const updatedLanguage = await this.languagesService.updateLanguage(id, updateLanguageDto);
         return updatedLanguage;
     }
 
-    @Roles("Admin")
-    @UseGuards(RolesGuard)
     @Delete(':id')
     async remove(@Param('id') id: number) {
         await this.languagesService.deleteLanguage(id);
         return { message: 'Язык удален' };
     }
 
-    @Roles("Admin")
-    @UseGuards(RolesGuard)
     @Get('search/:name')
     async findByName(@Param('name') name: string) {
         try {

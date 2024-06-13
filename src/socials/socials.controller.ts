@@ -2,7 +2,7 @@ import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {SocialsService} from "./socials.service";
 import {CreateSocialDto} from "./dto/create-social.dto";
 
-@Controller('socials')
+@Controller('api/socials')
 export class SocialsController {
 
     constructor(private socialsService: SocialsService) {}

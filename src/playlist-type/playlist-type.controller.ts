@@ -2,7 +2,7 @@ import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {PlaylistTypeService} from "./playlist-type.service";
 import {PlaylistTypeDto} from "./dto/playlist-type.dto";
 
-@Controller('playlist-type')
+@Controller('api/playlist-type')
 export class PlaylistTypeController {
 
     constructor(private playlistTypeService: PlaylistTypeService) {}

@@ -2,7 +2,7 @@ import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {ReleaseTypeService} from "./release-type.service";
 import {CreateReleaseTypeDto} from "./dto/create-release-type.dto";
 
-@Controller('release-type')
+@Controller('api/release-type')
 export class ReleaseTypeController {
 
     constructor(private releaseTypeService: ReleaseTypeService) {}

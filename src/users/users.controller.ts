@@ -5,7 +5,7 @@ import { Roles } from "../auth/roles-auth.decorator";
 import { RolesGuard } from "../auth/roles.guard";
 import { BanUserDto } from "./dto/ban-user.dto";
 
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
 
     constructor(private usersService: UsersService) {}

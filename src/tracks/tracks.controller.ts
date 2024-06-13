@@ -15,7 +15,7 @@ import {FileFieldsInterceptor} from "@nestjs/platform-express";
 import {CreateTrackDto} from "./dto/create-track.dto";
 import {UpdateTrackDto} from "./dto/update-track.dto";
 
-@Controller('tracks')
+@Controller('api/tracks')
 export class TracksController {
     constructor(private readonly tracksService: TracksService) {}
 

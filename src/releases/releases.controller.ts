@@ -15,7 +15,7 @@ import {FileFieldsInterceptor} from "@nestjs/platform-express";
 import {CreateReleaseDto} from "./dto/create-release.dto";
 import {UpdateReleaseDto} from "./dto/update-release.dto";
 
-@Controller('releases')
+@Controller('api/releases')
 export class ReleasesController {
     constructor(private readonly releasesService: ReleasesService) {}
 

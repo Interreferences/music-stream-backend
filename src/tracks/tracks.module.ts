@@ -9,10 +9,12 @@ import {FileService} from "../file/file.service";
 import {Language} from "../languages/languages.model";
 import {TrackLanguages} from "./track-languages.model";
 import {Release} from "../releases/releases.model";
+import {PlaylistTracks} from "../playlists/playlist-tracks.model";
+import {Playlist} from "../playlists/playlists.model";
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Track, TrackArtists, Artist, TrackLanguages, Language, Release]),
+    SequelizeModule.forFeature([Track, TrackArtists, Artist, TrackLanguages, Language, Release, Playlist, PlaylistTracks]),
   ],
   controllers: [TracksController],
   providers: [TracksService, FileService]

@@ -9,6 +9,7 @@ import {PlaylistType} from "./playlist-type.model";
     SequelizeModule.forFeature([PlaylistType])
   ],
   controllers: [PlaylistTypeController],
-  providers: [PlaylistTypeService]
+  providers: [PlaylistTypeService],
+  exports: [PlaylistTypeService],
 })
 export class PlaylistTypeModule {}

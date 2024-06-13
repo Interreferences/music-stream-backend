@@ -17,12 +17,16 @@ export class RolesGuard implements CanActivate {
                 context.getClass(),
             ]);
 
+            console.log('Required Roles:', requiredRoles);
+
             if (!requiredRoles) {
                 return true;
             }
 
             const req = context.switchToHttp().getRequest();
             const authHeader = req.headers.authorization;
+            console.log('Authorization Header:', authHeader);
+
             const bearer = authHeader.split(' ')[0];
             const token = authHeader.split(' ')[1];
 
@@ -30,10 +34,12 @@ export class RolesGuard implements CanActivate {
                 throw new UnauthorizedException({ message: 'Пользователь не авторизован' });
             }
 
-            const user = this.jwtService.verify(token);
+            const user = this.jwtService.verify(token, { secret: process.env.PRIVATE_KEY || 'SECRET' });
             req.user = user;
+
             return requiredRoles.includes(user.role.value);
         } catch (e) {
+            console.error(e);
             throw new HttpException({ message: 'Недостаточно прав доступа' }, HttpStatus.FORBIDDEN);
         }
     }

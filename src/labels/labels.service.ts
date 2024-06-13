@@ -4,6 +4,7 @@ import { Label } from './label.model';
 import { CreateLabelDto } from './dto/create-label.dto';
 import { UpdateLabelDto } from './dto/update-label.dto';
 import {Op} from "sequelize";
+import {Track} from "../tracks/tracks.model";
 
 @Injectable()
 export class LabelsService {
@@ -18,7 +19,14 @@ export class LabelsService {
     }
 
     async findLabelById(id: number): Promise<Label> {
-        return await this.labelRepository.findByPk(id);
+        return await this.labelRepository.findByPk(id,{
+            include: [
+                {
+                    model: Track,
+                    through: { attributes: [] },
+                }
+            ],
+        });
     }
 
     async updateLabel(id: number, dto: UpdateLabelDto): Promise<Label> {

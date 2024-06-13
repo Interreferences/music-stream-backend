@@ -4,6 +4,7 @@ import { Genres } from './genres.model';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import {Op} from "sequelize";
+import {Track} from "../tracks/tracks.model";
 
 @Injectable()
 export class GenresService {
@@ -19,7 +20,12 @@ export class GenresService {
     }
 
     async getGenreById(id: number) {
-        return await this.genreRepository.findByPk(id);
+        return await this.genreRepository.findByPk(id, {
+            include: [{
+                model: Track, // включаем модель Track
+                through: { attributes: [] } // исключаем атрибуты промежуточной таблицы
+            }]
+        });
     }
 
     async updateGenre(id: number, dto: UpdateGenreDto) {

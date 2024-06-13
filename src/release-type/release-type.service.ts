@@ -8,6 +8,21 @@ export class ReleaseTypeService {
 
     constructor(@InjectModel(ReleaseType) private releaseTypeRepository: typeof ReleaseType) {}
 
+    async onModuleInit() {
+        const releaseTypeTitles = ['Сингл', 'Мини-альбом', 'Альбом'];
+
+        for (const title of releaseTypeTitles) {
+            const releaseType = await this.getReleaseTypeByValue(title);
+
+            if (!releaseType) {
+                const defaultReleaseTypeDto: CreateReleaseTypeDto = {
+                    title: title
+                };
+                await this.createReleaseType(defaultReleaseTypeDto);
+            }
+        }
+    }
+
     async createReleaseType(dto: CreateReleaseTypeDto) {
         return this.releaseTypeRepository.create(dto);
     }

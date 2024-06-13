@@ -6,14 +6,22 @@ import { User } from "./users.model";
 import { Role } from "../roles/roles.model";
 import { RolesModule } from "../roles/roles.module";
 import { AuthModule } from "../auth/auth.module";
+import {Track} from "../tracks/tracks.model";
+import {Playlist} from "../playlists/playlists.model";
+import {PlaylistsService} from "../playlists/playlists.service";
+import {PlaylistsModule} from "../playlists/playlists.module";
+import {FileService} from "../file/file.service";
+import {PlaylistTypeModule} from "../playlist-type/playlist-type.module";
 
 @Module({
     controllers: [UsersController],
-    providers: [UsersService],
+    providers: [UsersService, PlaylistsService, FileService],
     imports: [
-        SequelizeModule.forFeature([User, Role]),
+        SequelizeModule.forFeature([User, Role, Track, Playlist]),
         RolesModule,
         forwardRef(() => AuthModule),
+        PlaylistsModule,
+        PlaylistTypeModule,
     ],
     exports: [
         UsersService,

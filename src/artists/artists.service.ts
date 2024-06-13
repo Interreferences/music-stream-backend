@@ -7,6 +7,11 @@ import { Op } from 'sequelize';
 import { FileService, FileType } from '../file/file.service';
 import {ArtistSocials} from "./artist-socials.model";
 import {Social} from "../socials/socials.model";
+import {Track} from "../tracks/tracks.model";
+import {Release} from "../releases/releases.model";
+import {ReleaseType} from "../release-type/release-type.model";
+import {TrackArtists} from "../tracks/track-artists.model";
+import {ReleaseArtists} from "../releases/release-artists.model";
 
 @Injectable()
 export class ArtistsService {
@@ -14,6 +19,8 @@ export class ArtistsService {
         @InjectModel(Artist) private artistRepository: typeof Artist,
         @InjectModel(ArtistSocials) private artistSocialsRepository: typeof ArtistSocials,
         @InjectModel(Social) private socialRepository: typeof Social,
+        @InjectModel(TrackArtists) private trackArtistsRepository: typeof TrackArtists,
+        @InjectModel(ReleaseArtists) private releaseArtistsRepository: typeof ReleaseArtists,
         private fileService: FileService
     ) {}
 
@@ -58,6 +65,14 @@ export class ArtistsService {
                 {
                     model: Social,
                     attributes: ['id', 'title'],
+                },
+                {
+                    model: Track,
+                    through: { attributes: [] },
+                },
+                {
+                    model: Release,
+                    through: { attributes: [] },
                 },
             ]
         });
@@ -108,6 +123,12 @@ export class ArtistsService {
         if (artist) {
             this.fileService.removeFile(artist.avatar);
             this.fileService.removeFile(artist.banner);
+
+            await this.artistSocialsRepository.destroy({ where: { artistId: id } });
+            await this.trackArtistsRepository.destroy({ where: { artistId: id } });
+            await this.releaseArtistsRepository.destroy({ where: { artistId: id } });
+
+
             await artist.destroy();
         }
         return artist;

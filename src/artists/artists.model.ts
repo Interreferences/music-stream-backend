@@ -14,19 +14,19 @@ interface ArtistCreationAttrs {
 
 @Table({ tableName: 'artists' })
 export class Artist extends Model<Artist, ArtistCreationAttrs> {
-    @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
+    @Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true })
     id: number;
 
-    @Column({type: DataType.STRING, unique: false, allowNull: false})
+    @Column({ type: DataType.STRING, allowNull: false })
     name: string;
 
-    @Column({type: DataType.STRING, unique: false, allowNull: false})
+    @Column({ type: DataType.STRING, allowNull: false })
     avatar: string;
 
-    @Column({type: DataType.STRING, unique: false, allowNull: false})
+    @Column({ type: DataType.STRING, allowNull: false })
     banner: string;
 
-    @Column({type: DataType.TEXT, allowNull: true})
+    @Column({ type: DataType.TEXT, allowNull: true })
     bio: string;
 
     @BelongsToMany(() => Track, () => TrackArtists)

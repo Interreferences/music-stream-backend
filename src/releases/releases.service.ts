@@ -122,7 +122,7 @@ export class ReleasesService {
     }
 
     async findReleaseById(id: number) {
-        const release = await this .releaseRepository.findByPk(id, {
+        const release = await this.releaseRepository.findByPk(id, {
             include: [
                 {
                     model: Artist,

@@ -11,12 +11,14 @@ import {ReleaseArtists} from "../releases/release-artists.model";
 import {Social} from "../socials/socials.model";
 import {ArtistSocials} from "./artist-socials.model";
 import {SocialsService} from "../socials/socials.service";
+import {RolesModule} from "../roles/roles.module";
+import {JwtService} from "@nestjs/jwt";
 
 @Module({
   imports: [
       SequelizeModule.forFeature([Artist, Release, ReleaseArtists, Track, TrackArtists, Social, ArtistSocials]),
   ],
   controllers: [ArtistsController],
-  providers: [ArtistsService, FileService, SocialsService]
+  providers: [ArtistsService, FileService, SocialsService, RolesModule, JwtService]
 })
 export class ArtistsModule {}

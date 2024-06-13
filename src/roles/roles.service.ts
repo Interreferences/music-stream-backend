@@ -8,6 +8,21 @@ export class RolesService {
 
     constructor(@InjectModel(Role) private roleRepository: typeof Role) {}
 
+    async onModuleInit() {
+        const roleTitles = ['Admin', 'User'];
+
+        for (const title of roleTitles) {
+            const role = await this.getRoleByValue(title);
+
+            if (!role) {
+                const defaultRoleDto: CreateRoleDto = {
+                    value: title
+                };
+                await this.createRole(defaultRoleDto);
+            }
+        }
+    }
+
     async createRole(dto: CreateRoleDto): Promise<Role> {
         return this.roleRepository.create(dto);
     }

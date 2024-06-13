@@ -4,6 +4,7 @@ import {UpdateLanguageDto} from "./dto/update-language.dto";
 import {InjectModel} from "@nestjs/sequelize";
 import {Language} from "./languages.model";
 import {Op} from "sequelize";
+import {Track} from "../tracks/tracks.model";
 
 @Injectable()
 export class LanguagesService {
@@ -17,7 +18,14 @@ export class LanguagesService {
     }
 
     async findLanguageById(id: number) {
-        return await this.languageRepository.findByPk(id);
+        return await this.languageRepository.findByPk(id, {
+            include: [
+                {
+                    model:Track,
+                    through: { attributes: [] },
+                }
+            ],
+        });
     }
 
     async updateLanguage(id: number, updateLanguageDto: UpdateLanguageDto) {

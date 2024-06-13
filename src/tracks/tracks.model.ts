@@ -5,6 +5,8 @@ import {TrackArtists} from "./track-artists.model";
 import {Release} from "../releases/releases.model";
 import {Language} from "../languages/languages.model";
 import {TrackLanguages} from "./track-languages.model";
+import {Playlist} from "../playlists/playlists.model";
+import {PlaylistTracks} from "../playlists/playlist-tracks.model";
 
 interface TrackCreationAttrs {
     title:string;
@@ -56,4 +58,8 @@ export class Track extends Model<Track, TrackCreationAttrs> {
 
     @BelongsToMany(() => Artist, () => TrackArtists)
     artists: Artist[];
+
+    @BelongsToMany(() => Playlist, () => PlaylistTracks)
+    playlists: Playlist[];
+
 }

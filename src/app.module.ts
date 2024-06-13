@@ -6,7 +6,6 @@ import { User } from "./users/users.model";
 import { Genres } from "./genres/genres.model";
 import { RolesModule } from './roles/roles.module';
 import { Role } from "./roles/roles.model";
-import { AuthModule } from './auth/auth.module';
 import { GenresModule } from './genres/genres.module';
 import { LabelsModule } from './labels/labels.module';
 import {Label} from "./labels/label.model";
@@ -28,10 +27,14 @@ import { ReleaseTypeModule } from './release-type/release-type.module';
 import {ReleaseType} from "./release-type/release-type.model";
 import {ReleaseLabels} from "./releases/release-labels.model";
 import { SocialsModule } from './socials/socials.module';
+import { AuthModule } from './auth/auth.module';
 import {Social} from "./socials/socials.model";
 import {ArtistSocials} from "./artists/artist-socials.model";
 import { PlaylistTypeModule } from './playlist-type/playlist-type.module';
 import {PlaylistType} from "./playlist-type/playlist-type.model";
+import { PlaylistsModule } from './playlists/playlists.module';
+import {Playlist} from "./playlists/playlists.model";
+import {PlaylistTracks} from "./playlists/playlist-tracks.model";
 
 @Module({
     controllers: [],
@@ -41,7 +44,8 @@ import {PlaylistType} from "./playlist-type/playlist-type.model";
             rootPath: path.resolve(__dirname, 'static'),
         }),
         ConfigModule.forRoot({
-            envFilePath: `.${process.env.NODE_ENV}.env`
+            envFilePath: `.${process.env.NODE_ENV}.env`,
+            isGlobal: true,
         }),
         SequelizeModule.forRoot({
             dialect: 'postgres',
@@ -66,14 +70,14 @@ import {PlaylistType} from "./playlist-type/playlist-type.model";
                 ReleaseType,
                 Social,
                 ArtistSocials,
-                PlaylistType],
+                PlaylistType,
+                Playlist,
+                PlaylistTracks],
             autoLoadModels: true,
             synchronize: true, // синхронизация моделей с таблицами
             sync: { alter: true },
         }),
-        UsersModule,
         RolesModule,
-        AuthModule,
         GenresModule,
         LabelsModule,
         ArtistsModule,
@@ -84,6 +88,9 @@ import {PlaylistType} from "./playlist-type/playlist-type.model";
         ReleaseTypeModule,
         SocialsModule,
         PlaylistTypeModule,
+        PlaylistsModule,
+        UsersModule,
+        AuthModule,
     ],
 })
 export class AppModule {}

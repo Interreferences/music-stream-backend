@@ -7,15 +7,17 @@ import {
     Param,
     Patch,
     Post,
-    UploadedFiles,
+    UploadedFiles, UseGuards,
     UseInterceptors
 } from '@nestjs/common';
 import {ArtistsService} from "./artists.service";
 import {CreateArtistDto} from "./dto/create-artist.dto";
 import {UpdateArtistDto} from "./dto/update-artist.dto";
 import {FileFieldsInterceptor} from "@nestjs/platform-express";
+import {Roles} from "../auth/roles-auth.decorator";
+import {RolesGuard} from "../auth/roles.guard";
 
-@Controller('artists')
+@Controller('api/artists')
 export class ArtistsController {
     constructor(private readonly artistsService: ArtistsService) {}
 
